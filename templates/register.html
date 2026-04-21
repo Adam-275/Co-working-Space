@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<div class="card">
+
+<h2>Create Account</h2>
+
+<form method="POST">
+
+<input name="email" placeholder="Email" required>
+
+<input name="password" placeholder="Password" type="password" required>
+
+<button>Register</button>
+
+</form>
+
+<br>
+
+<a href="/">Back to Login</a>
+
+{% if error %}
+
+<p style="color:red">{{error}}</p>
+
+{% endif %}
+
+</div>

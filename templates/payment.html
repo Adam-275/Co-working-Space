@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<div class="card">
+
+<h2>Payment</h2>
+
+<h3>Total: $ {{total}}</h3>
+
+<form method="POST">
+
+<select name="method">
+
+< name="method">
+
+<option>Credit Card</option>
+
+<option>PromptPay</option>
+
+<option>TrueMoney Wallet</option>
+
+<option>Online Banking</option>
+
+</select>
+
+<button>Confirm Payment</button>
+
+</form>
+
+
+{% if error %}
+
+<p style="color:red">{{error}}</p>
+
+{% endif %}
+
+</div>

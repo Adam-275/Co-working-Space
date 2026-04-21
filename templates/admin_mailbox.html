@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h1>Admin Mailbox</h1>
+
+<table>
+
+<tr>
+<th>User</th>
+<th>Room</th>
+<th>Message</th>
+<th>Date</th>
+</tr>
+
+{% for r in reviews %}
+
+<tr>
+
+<td>{{r[0]}}</td>
+<td>{{r[1]}}</td>
+<td>{{r[2]}}</td>
+<td>{{r[3]}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<div style="text-align:center;">
+
+<a href="/admin/dashboard">
+
+<button style="width:200px;">
+Back Dashboard
+</button>
+
+</a>
+
+</div>

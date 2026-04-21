@@ -1,0 +1,180 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h1>Select Your Workspace</h1>
+
+{% if error %}
+<p style="color:red;text-align:center">
+{{error}}
+</p>
+{% endif %}
+
+<div class="grid">
+
+
+<form method="POST">
+
+<input hidden name="room" value="Private Room">
+
+<div class="room">
+
+<img src="/static/images/private.jpg">
+
+<h3>Private Room</h3>
+
+<p>$20/hour</p>
+
+<p>Capacity: {{info["Private Room"]["capacity"]}} person</p>
+
+<p>
+
+Available:
+{% if availability["Private Room"] > 0 %}
+
+{{availability["Private Room"]}}
+
+{% else %}
+
+<span style="color:red">FULL</span>
+
+{% endif %}
+
+</p>
+
+<button>
+
+Select
+
+</button>
+
+</div>
+
+</form>
+
+
+
+<form method="POST">
+
+<input hidden name="room" value="Shared Room">
+
+<div class="room">
+
+<img src="/static/images/shared.jpg">
+
+<h3>Shared Room</h3>
+
+<p>$8/hour</p>
+
+<p>Capacity: {{info["Shared Room"]["capacity"]}} people</p>
+
+<p>
+
+Available:
+
+{% if availability["Shared Room"] > 0 %}
+
+{{availability["Shared Room"]}}
+
+{% else %}
+
+<span style="color:red">FULL</span>
+
+{% endif %}
+
+</p>
+
+<button>
+
+Select
+
+</button>
+
+</div>
+
+</form>
+
+
+
+<form method="POST">
+
+<input hidden name="room" value="Meeting Room">
+
+<div class="room">
+
+<img src="/static/images/meeting.jpg">
+
+<h3>Meeting Room</h3>
+
+<p>$15/hour</p>
+
+<p>Capacity: {{info["Meeting Room"]["capacity"]}} people</p>
+
+<p>
+
+Available:
+
+{% if availability["Meeting Room"] > 0 %}
+
+{{availability["Meeting Room"]}}
+
+{% else %}
+
+<span style="color:red">FULL</span>
+
+{% endif %}
+
+</p>
+
+<button>
+
+Select
+
+</button>
+
+</div>
+
+</form>
+
+
+
+<form method="POST">
+
+<input hidden name="room" value="Training Room">
+
+<div class="room">
+
+<img src="/static/images/training.jpg">
+
+<h3>Training Room</h3>
+
+<p>$25/hour</p>
+
+<p>Capacity: {{info["Training Room"]["capacity"]}} people</p>
+
+<p>
+
+Available:
+
+{% if availability["Training Room"] > 0 %}
+
+{{availability["Training Room"]}}
+
+{% else %}
+
+<span style="color:red">FULL</span>
+
+{% endif %}
+
+</p>
+
+<button>
+
+Select
+
+</button>
+
+</div>
+
+</form>
+
+
+</div>

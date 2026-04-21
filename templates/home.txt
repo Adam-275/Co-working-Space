@@ -1,0 +1,365 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h1>Welcome {{email}}</h1>
+
+
+<!-- ===== START BOOKING BUTTON ===== -->
+
+<div style="text-align:center; margin-bottom:30px;">
+
+<a href="/booking">
+<button style="width:250px;">
+Start Booking
+</button>
+</a>
+
+</div>
+
+
+<!-- ===== DASHBOARD ROW (DONUT + REVIEWS SIDE BY SIDE) ===== -->
+
+<div class="dashboard-row">
+
+
+<!-- ===== LEFT SIDE : POPULAR ROOMS DONUT ===== -->
+
+<div class="left-panel panel-box">
+
+<h2 style="text-align:center;">
+Most Popular Rooms This Month
+</h2>
+
+<div class="chart-box small-chart">
+
+<canvas id="popularRoomsChart"></canvas>
+
+</div>
+
+</div>
+
+
+<!-- ===== RIGHT SIDE : USER REVIEWS ===== -->
+
+<div class="right-panel panel-box">
+
+<div class="review-header">
+
+<h2>
+User Reviews
+</h2>
+
+<button class="small-review-btn"
+onclick="showReviewForm()">
+Write Review
+</button>
+
+</div>
+
+
+<div class="review-slider">
+
+<div id="reviewBox">
+Loading reviews...
+</div>
+
+</div>
+
+
+<!-- ===== REVIEW FORM (HIDDEN FIRST) ===== -->
+
+<div id="reviewForm"
+style="display:none; margin-top:20px;">
+
+<form method="POST" action="/submit_review">
+
+<select name="room" required>
+
+<option value="">
+Choose room to review
+</option>
+
+<option>
+Private Room
+</option>
+
+<option>
+Shared Room
+</option>
+
+<option>
+Meeting Room
+</option>
+
+<option>
+Training Room
+</option>
+
+</select>
+<select name="stars" required
+style="
+width:100%;
+margin-top:10px;
+padding:8px;
+border-radius:8px;
+border:none;
+">
+
+<option value="">Rate this room</option>
+<option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+<option value="4">⭐⭐⭐⭐ Very Good</option>
+<option value="3">⭐⭐⭐ Good</option>
+<option value="2">⭐⭐ Fair</option>
+<option value="1">⭐ Poor</option>
+
+</select>
+
+
+<textarea
+name="message"
+placeholder="Write your review here..."
+required
+style="
+width:100%;
+height:140px;
+margin-top:12px;
+padding:12px;
+border-radius:10px;
+border:none;
+"
+></textarea>
+
+
+<button>
+Submit Review
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ===== POPULAR ROOMS DONUT CHART SCRIPT ===== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+fetch("/popular_rooms_data")
+
+.then(res => res.json())
+
+.then(data => {
+
+const ctx =
+document.getElementById('popularRoomsChart');
+
+new Chart(ctx, {
+
+type: 'doughnut',
+
+data: {
+
+labels: data.labels,
+
+datasets: [{
+
+data: data.values,
+
+backgroundColor: [
+'#00c6ff',
+'#ff9800',
+'#4caf50',
+'#e91e63'
+],
+
+borderWidth: 0
+
+}]
+
+},
+
+options: {
+
+responsive: true,
+
+plugins: {
+
+legend: {
+
+labels: {
+
+color: 'white'
+
+}
+
+}
+
+}
+
+}
+
+});
+
+});
+
+</script>
+
+
+<!-- ===== REVIEW SLIDESHOW SCRIPT ===== -->
+
+<script>
+
+let reviews = []
+
+let index = 0
+
+
+fetch("/reviews_data")
+
+.then(res => res.json())
+
+.then(data => {
+
+reviews = data.map(r => {
+
+let stars = "⭐".repeat(r.stars)
+
+return `
+<b>${r.email}</b><br>
+${r.room}<br>
+${stars}<br>
+"${r.message}"<br>
+<small>${r.date}</small>
+`
+
+})
+
+showReview()
+
+setInterval(showReview, 3000)
+
+})
+
+
+function showReview(){
+
+if(reviews.length === 0) return
+
+
+document.getElementById("reviewBox").style.opacity = 0;
+
+setTimeout(() => {
+
+document.getElementById("reviewBox").innerHTML =
+reviews[index];
+
+document.getElementById("reviewBox").style.opacity = 1;
+
+}, 300);
+
+reviews[index]
+
+
+index++
+
+
+if(index >= reviews.length)
+
+index = 0
+
+}
+
+
+function showReviewForm(){
+
+document.getElementById("reviewForm")
+
+.style.display = "block"
+
+}
+
+</script>
+
+
+<!-- ===== BOOKING HISTORY TABLE ===== -->
+
+<h2 style="margin-top:50px;">
+Booking History
+</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Room</th>
+<th>Date</th>
+<th>Hours</th>
+<th>Total</th>
+<th>Payment</th>
+<th>Status</th>
+<th>Receipt</th>
+</tr>
+
+
+{% for h in history %}
+
+<tr>
+
+<td>{{h[0]}}</td>
+
+<td>{{h[1]}}</td>
+
+<td>{{h[2]}}</td>
+
+<td>{{h[3]}}</td>
+
+<td>$ {{h[4]}}</td>
+
+<td>{{h[5]}}</td>
+
+
+<td class="{{h[6]|lower}}">
+{{h[6]}}
+</td>
+
+
+<td>
+
+{% if h[6] == "Approved" %}
+
+<a href="/receipt/{{h[0]}}">
+
+<button>
+View
+</button>
+
+</a>
+
+{% else %}
+
+Pending
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+
+<!-- ===== LOGOUT ===== -->
+
+<div style="text-align:center; margin-top:30px;">
+
+<a href="/logout">
+Logout
+</a>
+
+</div>
